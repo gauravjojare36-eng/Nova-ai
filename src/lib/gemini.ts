@@ -4,7 +4,8 @@ let aiInstance: GoogleGenAI | null = null;
 
 function getAI(): GoogleGenAI {
   if (!aiInstance) {
-    const apiKey = process.env.GEMINI_API_KEY;
+    // @ts-ignore - Handle both Vite's import.meta.env and statically replaced process.env
+    const apiKey = process.env.GEMINI_API_KEY || (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_GEMINI_API_KEY : '');
     if (!apiKey) {
       console.warn("GEMINI_API_KEY is not set. The assistant will not be able to connect to the AI.");
     }
