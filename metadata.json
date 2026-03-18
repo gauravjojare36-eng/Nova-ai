@@ -1,0 +1,7 @@
+{
+  "name": "Nova AI - Smart Voice Controller",
+  "description": "A web-based prototype of the Nova AI Voice Assistant featuring speech recognition, Gemini AI integration, and text-to-speech.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
