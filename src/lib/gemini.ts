@@ -1,7 +1,17 @@
 import { GoogleGenAI } from '@google/genai';
 
-// Initialize the Gemini API client
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let aiInstance: GoogleGenAI | null = null;
+
+function getAI(): GoogleGenAI {
+  if (!aiInstance) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.warn("GEMINI_API_KEY is not set. The assistant will not be able to connect to the AI.");
+    }
+    aiInstance = new GoogleGenAI({ apiKey: apiKey || 'MISSING_API_KEY' });
+  }
+  return aiInstance;
+}
 
 export interface NovaAction {
   type: 'SPEAK' | 'SYSTEM_COMMAND' | 'OPEN_APP' | 'CALL_CONTACT';
@@ -24,6 +34,7 @@ export interface NovaResponse {
 
 export async function getNovaResponse(transcript: string, language: string = 'en-US'): Promise<NovaResponse> {
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: `You are Nova, a highly intelligent, fast, and scalable voice-controlled personal assistant.
